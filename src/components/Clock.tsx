@@ -3,22 +3,28 @@ import moment from "moment-timezone";
 
 interface ClockProps {
   name: string;
-  timezone: string;
+  offset: string;
   onRemove: () => void;
 }
 
-const Clock: React.FC<ClockProps> = ({ name, timezone, onRemove }) => {
-  const [time, setTime] = useState<string>(
-    moment.tz(timezone).format("HH:mm:ss")
-  );
+const Clock: React.FC<ClockProps> = ({ name, offset, onRemove }) => {
+  const [time, setTime] = useState<string>(getCurrentTime(offset));
+
+  function getCurrentTime(offset: string): string {
+    const hoursOffset = parseInt(offset, 10);
+    return moment
+      .tz("Europe/Moscow")
+      .add(hoursOffset, "hours")
+      .format("HH:mm:ss");
+  }
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTime(moment.tz(timezone).format("HH:mm:ss"));
+      setTime(getCurrentTime(offset));
     }, 1000);
 
-    return () => clearInterval(interval); 
-  }, [timezone]);
+    return () => clearInterval(interval);
+  }, [offset]);
 
   return (
     <div style={{ display: "flex", alignItems: "center", margin: "10px 0" }}>

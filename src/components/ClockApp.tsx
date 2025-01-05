@@ -3,19 +3,19 @@ import Clock from "./Clock";
 
 interface ClockData {
   name: string;
-  timezone: string;
+  offset: string; 
 }
 
 const ClockApp: React.FC = () => {
   const [clocks, setClocks] = useState<ClockData[]>([]);
   const [name, setName] = useState<string>("");
-  const [timezone, setTimezone] = useState<string>("");
+  const [offset, setOffset] = useState<string>(""); 
 
   const addClock = () => {
-    if (name && timezone) {
-      setClocks([...clocks, { name, timezone }]);
+    if (name && offset) {
+      setClocks([...clocks, { name, offset }]);
       setName("");
-      setTimezone("");
+      setOffset("");
     }
   };
 
@@ -33,11 +33,11 @@ const ClockApp: React.FC = () => {
         onChange={(e) => setName(e.target.value)}
       />
       <input
-        style={{ width: "350px" }}
+        style={{ width: "350px", marginLeft: "10px" }}
         type="text"
-        placeholder="Временная зона (например, 'America/New_York')"
-        value={timezone}
-        onChange={(e) => setTimezone(e.target.value)}
+        placeholder="Разница во времени (например, '-5' или '+3')"
+        value={offset}
+        onChange={(e) => setOffset(e.target.value)}
       />
       <button onClick={addClock} style={{ marginLeft: "10px" }}>
         Добавить
@@ -48,7 +48,7 @@ const ClockApp: React.FC = () => {
           <Clock
             key={index}
             name={clock.name}
-            timezone={clock.timezone}
+            offset={clock.offset} 
             onRemove={() => removeClock(index)}
           />
         ))}
